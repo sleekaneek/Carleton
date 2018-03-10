@@ -73,6 +73,7 @@ public class SliderPuzzleGame extends Application {
 
         // Start Button
         Button startStop = new Button();
+        Boolean startState = true; // true : Start, false : Stop
         startStop.relocate(768,367);
         startStop.setPrefSize(187,25);
         startStop.setStyle("-fx-color: DARKGREEN");
@@ -82,6 +83,13 @@ public class SliderPuzzleGame extends Application {
         startStop.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent e) {
                 if (e.getButton() == MouseButton.PRIMARY) {
+                    if (startState){ // start state
+
+                    }
+                    else{ // stop state
+
+                    }
+
                     startStop.setText("Stop");
                     startStop.setStyle("-fx-color: DARKRED");
                     thumbNail.setDisable(true);
