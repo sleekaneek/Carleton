@@ -20,8 +20,5 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-Java/Ass4/.idea/compiler.xml
-Java/Ass4/.idea/misc.xml
-Java/Ass4/.idea/workspace.xml
-Java/Ass4/.idea/modules.xml
-Java/Ass4/Ass4.iml
+
+JavaAss5/out/
