@@ -20,6 +20,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -67,15 +70,28 @@ public class SliderPuzzleGame extends Application {
 
         // Buttons imgaes
         buttons = new Button[4][4];
-        buttonImages = new String[][] {{"Lego_00.png", "Lego_01.png", "Lego_03.png", "Lego_10.png", "Lego_11.png", "Lego_12.png", "Lego_13.png",
-                "Lego_20.png", "Lego_21.png", "Lego_22.png", "Lego_23.png", "Lego_30.png", "Lego_31.png", "Lego_32.png", "Lego_33.png"}, {"Numbers.00.png",
-                "Numbers_01.png", "Numbers_02.png", "Numbers_03.png", "Numbers_10.png", "Numbers_11.png", "Numbers_12.png",
-                "Numbers_13.png", "Numbers_20.png", "Numbers_21.png", "Numbers_22.png", "Numbers_23.png", "Numbers_30.png",
-                "Numbers_31.png", "Numbers_32.png", "Numbers_33.png"}, {"Pets_00.png", "Pets_01.png", "Pets_02.png",
-                "Pets_03.png", "Pets_10.png", "Pets_11.png", "Pets_12.png", "Pets_13.png", "Pets_20.png", "Pets_21.png", "Pets_22.png", "Pets_23.png", "Pets_30.png",
-                "Pets_31.png", "Pets_32.png", "Pets_33.png"}, {"Scenery_00.png", "Scenery_01.png", "Scenery_02.png",
-                "Scenery_03.png", "Scenery_10.png", "Scenery_11.png", "Scenery_12.png", "Scenery_13.png", "Scenery_20.png", "Scenery_21.png", "Scenery_22.png", "Scenery_23.png",
-                "Scenery_31.png", "Scenery_32.png", "Scenery_33.png"}};
+        buttonImages = new String[][] {
+
+                {       "Lego_00.png", "Lego_01.png", "Lego_02.png", "Lego_03.png",
+                        "Lego_10.png", "Lego_11.png", "Lego_12.png", "Lego_13.png",
+                        "Lego_20.png", "Lego_21.png", "Lego_22.png", "Lego_23.png",
+                        "Lego_30.png", "Lego_31.png", "Lego_32.png", "Lego_33.png"},
+
+                {       "Numbers_00.png", "Numbers_01.png", "Numbers_02.png", "Numbers_03.png",
+                        "Numbers_10.png", "Numbers_11.png", "Numbers_12.png", "Numbers_13.png",
+                        "Numbers_20.png", "Numbers_21.png", "Numbers_22.png", "Numbers_23.png",
+                        "Numbers_30.png", "Numbers_31.png", "Numbers_32.png", "Numbers_33.png"},
+
+                {       "Pets_00.png", "Pets_01.png", "Pets_02.png", "Pets_03.png",
+                        "Pets_10.png", "Pets_11.png", "Pets_12.png", "Pets_13.png",
+                        "Pets_20.png", "Pets_21.png", "Pets_22.png", "Pets_23.png",
+                        "Pets_30.png", "Pets_31.png", "Pets_32.png", "Pets_33.png"},
+
+                {       "Scenery_00.png", "Scenery_01.png", "Scenery_02.png", "Scenery_03.png",
+                        "Scenery_10.png", "Scenery_11.png", "Scenery_12.png", "Scenery_13.png",
+                        "Scenery_20.png", "Scenery_21.png", "Scenery_22.png", "Scenery_23.png",
+                        "Scenery_30.png", "Scenery_31.png", "Scenery_32.png", "Scenery_33.png"}
+        };
 
         int tileCount = buttonImages[2].length - 1;
         for (int i = 0; i < 4; i++) {
@@ -91,14 +107,6 @@ public class SliderPuzzleGame extends Application {
             }
 
         }
-
-
-//        public void swap(i,j){
-//
-//        }
-
-
-
 
         // Updates the thumbnail
         puzzlesList.setOnMouseClicked(new EventHandler<MouseEvent>(){
@@ -127,12 +135,6 @@ public class SliderPuzzleGame extends Application {
             }
         });
 
-
-
-
-
-
-
         startStop.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent e) {
                 if (e.getButton() == MouseButton.PRIMARY) {
@@ -152,8 +154,6 @@ public class SliderPuzzleGame extends Application {
                 }
             }
         });
-
-
 
         mainPane.getChildren().addAll(thumbNail, puzzlesList, startStop, timeLabel, timeField);
         primaryStage.setTitle("Slider Puzzle Game");
@@ -180,18 +180,29 @@ public class SliderPuzzleGame extends Application {
 
         String[] tiles = buttonImages[index];
 
-        // shuffle the array
+        shuffleArray(tiles);
 
-        Random rnd = ThreadLocalRandom.current();
-        for (int i = tiles.length - 1; i > 0; i--)
-        {
-            int ind = rnd.nextInt(i + 1);
-            // Simple swap
-            String a = tiles[ind];
-            tiles[ind] = tiles[i];
-            tiles[i] = a;
+        ShowTiles(tiles);
+    }
+
+    public static void shuffleArray(String[] a) {
+        int n = a.length;
+        Random random = new Random();
+        random.nextInt();
+        for (int i = 0; i < n; i++) {
+            int change = i + random.nextInt(n - i);
+            swap(a, i, change);
         }
+    }
 
+    private static void swap(String[] a, int i, int change) {
+        String helper = a[i];
+        a[i] = a[change];
+        a[change] = helper;
+    }
+
+    public void ShowTiles(String[] tiles)
+    {
         int tileCount = tiles.length - 1;
         // load the array on to the tiles
         for (int i = 0; i < 4; i++) {
@@ -200,7 +211,6 @@ public class SliderPuzzleGame extends Application {
                 tileCount--;
             }
         }
-
     }
 
     public static void main(String[] args) {
