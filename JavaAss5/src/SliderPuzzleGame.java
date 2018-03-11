@@ -20,6 +20,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +36,11 @@ public class SliderPuzzleGame extends Application {
     Button startStop;
     String[][] buttonImages;
     Pane mainPane;
+    Timeline updateTimer;
+    String choice;
+
+    private long startTime;
+
     public void start(Stage primaryStage) {
         mainPane = new Pane();
         // Listviews
@@ -68,6 +74,17 @@ public class SliderPuzzleGame extends Application {
         timeField.setAlignment(Pos.CENTER_LEFT);
         timeField.setText("0:00");
 
+        updateTimer = new Timeline(new KeyFrame(Duration.millis(1000),
+                new EventHandler<ActionEvent>() {
+                    public void handle(ActionEvent event) {
+                        // FILL IN YOUR CODE HERE THAT WILL GET CALLED ONCE PER SEC.
+                        timeField.setText(getElapsedTimeStr());
+                    }
+                }));
+        updateTimer.setCycleCount(Timeline.INDEFINITE);
+
+
+
         // Buttons imgaes
         buttons = new Button[4][4];
         buttonImages = new String[][] {
@@ -93,26 +110,23 @@ public class SliderPuzzleGame extends Application {
                         "Scenery_30.png", "Scenery_31.png", "Scenery_32.png", "Scenery_33.png"}
         };
 
-        int tileCount = buttonImages[2].length - 1;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 buttons[i][j] = new Button();
                 buttons[i][j].relocate(10 + j * 187, 10 + i * 187);
                 buttons[i][j].setPrefSize(187, 187);
                 buttons[i][j].setPadding(new Insets(1, 1, 1, 1));
-                String tile = buttonImages[2][tileCount];
-                buttons[i][j].setGraphic(new ImageView(new Image(getClass().getResourceAsStream(tile))));
                 mainPane.getChildren().addAll(buttons[i][j]);
-                tileCount--;
             }
-
         }
+
+        ShowTiles("BLANK.png");
 
         // Updates the thumbnail
         puzzlesList.setOnMouseClicked(new EventHandler<MouseEvent>(){
             public void handle(MouseEvent e) {
                 if (e.getButton() == MouseButton.PRIMARY) {
-                    String choice = puzzlesList.getSelectionModel().getSelectedItem();
+                    choice = puzzlesList.getSelectionModel().getSelectedItem();
                     String thumbName = "BLANK.png";
 
                     if (choice.equals("Lego")){
@@ -130,7 +144,7 @@ public class SliderPuzzleGame extends Application {
 
                     thumbNail.setGraphic(new ImageView(new Image(getClass().getResourceAsStream(thumbName))));
 
-                    ShufflePuzzleImages(choice);
+                    //ShufflePuzzleImages(choice);
                 }
             }
         });
@@ -143,12 +157,16 @@ public class SliderPuzzleGame extends Application {
                         startStop.setStyle("-fx-color: DARKRED");
                         thumbNail.setDisable(true);
                         puzzlesList.setDisable(true);
+                        ShufflePuzzleImages(choice);
+                        startTime = System.currentTimeMillis();
+                        updateTimer.play();
                         startState = false;
                     } else { // stop state
                         startStop.setText("Start");
                         startStop.setStyle("-fx-color: DARKGREEN");
                         thumbNail.setDisable(false);
                         puzzlesList.setDisable(false);
+                        updateTimer.stop();
                         startState = true;
                     }
                 }
@@ -211,6 +229,28 @@ public class SliderPuzzleGame extends Application {
                 tileCount--;
             }
         }
+
+        Random random = new Random();
+        buttons[random.nextInt(3)][random.nextInt(3)].setGraphic(new ImageView(new Image(getClass().getResourceAsStream("BLANK.png"))));
+
+    }
+
+    public void ShowTiles(String singleTile)
+    {
+        // load the array on to the tiles
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                buttons[i][j].setGraphic(new ImageView(new Image(getClass().getResourceAsStream(singleTile))));
+            }
+        }
+    }
+
+    public String getElapsedTimeStr() {
+        long millis = System.currentTimeMillis() - startTime;
+        SimpleDateFormat sdf = new SimpleDateFormat("mm:ss");
+
+        String strDate = sdf.format(millis);
+        return strDate;
     }
 
     public static void main(String[] args) {
