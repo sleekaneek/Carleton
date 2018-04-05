@@ -3,16 +3,20 @@ import java.util.*;
 public class User {
     private String userName;
     private boolean online;
-    //ArrayList
     private ArrayList<Song> songList;
+
     public User() { this(""); }
+
     public User(String u) {
         userName = u;
         online = false;
         songList = new ArrayList<>();
     }
+
     public String getUserName() { return userName; }
+
     public boolean isOnline() { return online; }
+
     public String toString() {
         String s = "" + userName + ": " + songList.size() + " songs (";
         if (!online) s += "not ";
@@ -70,7 +74,7 @@ public class User {
             temp = String.format("%2d",counter) + ". " + String.format("%-30s", s.getTitle());
             temp += String.format("%-20s",s.getArtist());
             temp += String.format("%2d:%2d",s.getMinutes(),s.getSeconds());
-            temp += String.format("%20s",s.getOwner().userName);
+            temp += String.format("          %-20s",s.getOwner().userName);
             output.add(temp);
             counter++;
 
@@ -85,8 +89,8 @@ public class User {
         int counter = 1;
         String temp = "";
         temp += String.format("%10s", "Title");
-        temp += String.format("%32s", "Artist");
-        temp += String.format("%17s", "Time");
+        temp += String.format("%30s", "Artist");
+        temp += String.format("%19s", "Time");
         temp += String.format("%18s", "Owner\n");
         outputByArtist.add(temp);
         for (Song s : m.availableSongsByArtist(artist)) {
@@ -109,13 +113,13 @@ public class User {
         return null;
     }
 
-    public void downloadSong(MusicExchangeCenter m, String title, String ownerName) {
+    public void downloadSong(MusicExchangeCenter m, String title, String ownerName){
         Song DownloadedSong = m.getSong(title, ownerName);
         if (DownloadedSong != null) {
-            this.addSong(DownloadedSong);
+            Song s= new Song(DownloadedSong.getTitle(),DownloadedSong.getArtist(),DownloadedSong.getMinutes(),DownloadedSong.getSeconds());
+            this.addSong(s);
         }
     }
-
 
     // Various Users for test purposes
     public static User DiscoStew() {

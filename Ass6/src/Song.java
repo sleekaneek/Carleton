@@ -1,4 +1,4 @@
-public class Song {
+public class Song implements Comparable<Song> {
     private String title;
     private String artist;
     private int duration;
@@ -46,4 +46,16 @@ public class Song {
 
     public User getOwner(){return owner;}
 
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Song)) return false;
+        return title.equals(((Song)obj).title);
+    }
+
+    public int hashCode() {
+        return title.hashCode();
+    }
+
+    public int compareTo(Song s) {
+        return title.compareTo(s.title);
+    }
 }
